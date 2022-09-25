@@ -31,7 +31,7 @@ func gcmEncrypt(b []byte) (*gcmEncryptedData, error) {
 
 	aesgcm, err := cipher.NewGCM(block)
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	return &gcmEncryptedData{
