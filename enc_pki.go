@@ -40,6 +40,16 @@ func CreateEncryptedRSAKey(pubKey *rsa.PublicKey, size int) (*EncryptedRSAKey, e
 		return nil, err
 	}
 
+	return EncryptRSAKey(pubKey, b)
+}
+
+// EncryptRSAKey encrypts the provided Base64EncodedRSAKey using the
+// supplied public key.
+// The Base64EncodedRSAKey is actually symmetrically encrypted using a one
+// time random key and nonce, and it is the random key that is then
+// envelope encrypted with the supplied public key.  This ensures that
+// the process will work with different bit sizes.
+func EncryptRSAKey(pubKey *rsa.PublicKey, b *Base64EncodedRSAKey) (*EncryptedRSAKey, error) {
 	jsonBytes, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
