@@ -30,13 +30,23 @@ func CreateEncodedRSAKey(size int) (*Base64EncodedRSAKey, error) {
 
 // Marshal returns a Base64EncodedRSAKey from the specified key
 func Marshal(priv *rsa.PrivateKey) (*Base64EncodedRSAKey, error) {
+	b, err := MarshalPublicKey(priv)
+	if err != nil {
+		return nil, err
+	}
+	b.PrivateKey = marshalPrivateKey(priv)
+	return b, nil
+}
+
+// MarshalPublicKey returns a Base64EncodedRSAKey that only
+// contains the public key, taken from the supplied private key
+func MarshalPublicKey(priv *rsa.PrivateKey) (*Base64EncodedRSAKey, error) {
 	pub := &priv.PublicKey
 	if pub == nil {
 		return nil, errNoPublicKey
 	}
 	return &Base64EncodedRSAKey{
-		PrivateKey: marshalPrivateKey(priv),
-		PublicKey:  marshalPublicKey(pub),
+		PublicKey: marshalPublicKey(pub),
 	}, nil
 }
 
