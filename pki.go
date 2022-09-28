@@ -1,7 +1,6 @@
 package pkigen
 
 import (
-	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
@@ -14,14 +13,16 @@ var errInvalidPublicKeyMaterial = errors.New("invalid PublicKey material")
 
 // Base64EncodedRSAKey stores details of RSA keys, as base64 url-encoded strings
 type Base64EncodedRSAKey struct {
-	PrivateKey string `json:"private_key"`
-	PublicKey  string `json:"public_key"`
+	PrivateKey string `json:"private_key,omitempty"`
+	PublicKey  string `json:"public_key,omitempty"`
 }
 
 // CreateEncodedRSAKey returns a fully populated Base64EncodedRSAKey,
 // where new keys are generated on each call using the specified number of bits
 func CreateEncodedRSAKey(size int) (*Base64EncodedRSAKey, error) {
-	priv, err := rsa.GenerateKey(rand.Reader, size)
+
+	// reader is defined in rand.go
+	priv, err := rsa.GenerateKey(reader, size)
 	if err != nil {
 		return nil, err
 	}
