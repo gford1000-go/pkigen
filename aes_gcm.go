@@ -3,6 +3,7 @@ package pkigen
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"io"
 )
 
@@ -15,12 +16,12 @@ type gcmEncryptedData struct {
 func gcmEncrypt(b []byte) (*gcmEncryptedData, error) {
 	// reader defined in rand.go
 	aesKey := make([]byte, 32)
-	if _, err := io.ReadFull(reader, aesKey); err != nil {
+	if _, err := io.ReadFull(rand.Reader, aesKey); err != nil {
 		return nil, err
 	}
 
 	nonce := make([]byte, 12)
-	if _, err := io.ReadFull(reader, nonce); err != nil {
+	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
 		return nil, err
 	}
 

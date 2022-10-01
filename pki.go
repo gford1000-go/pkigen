@@ -1,6 +1,7 @@
 package pkigen
 
 import (
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
@@ -22,7 +23,7 @@ type Base64EncodedRSAKey struct {
 func CreateEncodedRSAKey(size int) (*Base64EncodedRSAKey, error) {
 
 	// reader is defined in rand.go
-	priv, err := rsa.GenerateKey(reader, size)
+	priv, err := rsa.GenerateKey(rand.Reader, size)
 	if err != nil {
 		return nil, err
 	}
